@@ -1,0 +1,38 @@
+﻿@page "/login"
+
+<h3>Login</h3>
+
+<EditForm Model="model" OnSubmit="OnSubmit">
+    <label for="email">Email</label>
+    <InputText type="text" id="email" @bind-Value="model.Email" />
+
+    <label for="password">Password</label>
+    <InputText type="password" id="password" @bind-Value="model.Password" />
+    <button class="btn btn-success" type="submit">Login</button>
+
+</EditForm>
+
+@code {
+    private LoginModel model { get; set; }
+
+
+    protected override void OnInitialized()
+    {
+        model = new LoginModel();
+    }
+
+    private async Task OnSubmit()
+    {
+        var response = await Http.PostAsJsonAsync<LoginModel>("https://localhost:44339/api/Users/login", model);
+
+        if(response.IsSuccessStatusCode)
+        {
+            var token = await response.Content.ReadAsStringAsync();
+            Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            await sessionStorage.SetItemAsync<string>("authenticated", token);
+            NavManager.NavigateTo("/");
+        }
+
+    }
+}

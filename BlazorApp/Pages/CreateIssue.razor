@@ -1,0 +1,41 @@
+﻿@page "/createissue"
+<Auth/>
+<h3>Create issue</h3>
+
+<EditForm Model="model" OnSubmit="OnSubmit">
+    <label for="Customer">Customer</label>
+    <InputText type="text" id="customer" @bind-Value="model.Customer" />
+
+    <label for="Created">Created</label>
+    <input type="date" @bind-value="model.Created">
+
+    <label for="description">Description</label>
+    <InputText type="text" id="description" @bind-Value="model.Description" />
+
+    <label for="issuestatus">IssueStatus</label>
+    <InputText type="text" id="issuestatus" @bind-Value="model.IssueStatus" />
+
+    <label for="Completed">Completed</label>
+    <input type="date" @bind-value="model.Completed">
+
+    <button class="btn btn-success" type="submit">Create Issue</button>
+
+</EditForm>
+
+@code {
+    private CreateIssueModel model { get; set; }
+
+
+    protected override void OnInitialized()
+    {
+        model = new CreateIssueModel();
+    }
+
+    private async Task OnSubmit()
+    {
+
+        var response = await Http.PostAsJsonAsync<CreateIssueModel>("https://localhost:44339/api/issues", model);
+ 
+        NavManager.NavigateTo("/issues");
+    }
+}

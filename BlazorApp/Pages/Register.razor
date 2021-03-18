@@ -1,0 +1,42 @@
+﻿@page "/register"
+<h3>Register</h3>
+
+<EditForm Model="model" OnSubmit="OnSubmit">
+    <label for="firstname">First Name</label>
+    <InputText type="text" id="firstname" @bind-Value="model.FirstName" />
+
+    <label for="lastname">Last Name</label>
+    <InputText type="text" id="lastname" @bind-Value="model.LastName" />
+
+    <label for="email">Email</label>
+    <InputText type="text" id="email" @bind-Value="model.Email" />
+
+    <label for="password">Password</label>
+    <InputText type="password" id="password" @bind-Value="model.Password" />
+    <button class="btn btn-success" type="submit">Register</button>
+
+</EditForm>
+
+@code {
+    private RegisterModel model { get; set; }
+
+
+    protected override void OnInitialized()
+    {
+        model = new RegisterModel();
+    }
+
+    private async Task OnSubmit()
+    {
+        var response = await Http.PostAsJsonAsync<RegisterModel>("https://localhost:44339/api/Users/register", model);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var token = await response.Content.ReadAsStringAsync();
+            Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            await sessionStorage.SetItemAsync<string>("authenticated", token);
+            NavManager.NavigateTo("/");
+        }       
+    }
+}

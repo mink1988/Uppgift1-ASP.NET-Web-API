@@ -1,0 +1,36 @@
+﻿@page "/issues"
+<Auth />
+<h3>Issues</h3>
+
+@foreach (var issue in issues)
+{
+    <tr>
+        <td>@issue.Id</td>
+        <td>@issue.UserId</td>
+        <td>@issue.Customer</td>
+        <td>@issue.Description</td>
+        <td>@issue.Created</td>
+        <td>@issue.IssueStatus</td>
+        <td>@issue.Completed</td>
+    </tr>
+}
+
+@code {
+
+    private IEnumerable<IssuesModel> issues { get; set; } = Enumerable.Empty<IssuesModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (await sessionStorage.ContainKeyAsync("authenticated"))
+        {
+            issues = await GetIssuesAsync();
+        }
+
+    }
+
+    private async Task<IEnumerable<IssuesModel>> GetIssuesAsync()
+    {
+        return await Http.GetFromJsonAsync<IEnumerable<IssuesModel>>("https://localhost:44339/api/issues");
+    }
+}
+

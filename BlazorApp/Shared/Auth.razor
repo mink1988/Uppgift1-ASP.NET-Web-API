@@ -1,0 +1,12 @@
+﻿@code {
+  
+    protected override async Task OnInitializedAsync()
+    {
+
+        if (!await sessionStorage.ContainKeyAsync("authenticated"))
+        {
+            NavManager.NavigateTo("/login");
+        }
+
+    }
+}
