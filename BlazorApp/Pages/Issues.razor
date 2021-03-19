@@ -2,18 +2,33 @@
 <Auth />
 <h3>Issues</h3>
 
-@foreach (var issue in issues)
-{
-    <tr>
-        <td>@issue.Id</td>
-        <td>@issue.UserId</td>
-        <td>@issue.Customer</td>
-        <td>@issue.Description</td>
-        <td>@issue.Created</td>
-        <td>@issue.IssueStatus</td>
-        <td>@issue.Completed</td>
-    </tr>
-}
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>User Id</th>
+            <th>Customer</th>
+            <th>Description</th>
+            <th>Created</th>
+            <th>IssueStatus</th>
+            <th>Issue Completed</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var issue in issues)
+        {
+        <tr>
+            <td>@issue.Id</td>
+            <td>@issue.UserId</td>
+            <td>@issue.Customer</td>
+            <td>@issue.Description</td>
+            <td>@issue.Created</td>
+            <td>@issue.IssueStatus</td>
+            <td>@issue.Completed</td>
+        </tr>
+        }
+    </tbody>
+</table>
 
 @code {
 
