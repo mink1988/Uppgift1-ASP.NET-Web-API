@@ -2,16 +2,16 @@
 <h3>Register</h3>
 
 <EditForm Model="model" OnSubmit="OnSubmit">
-    <label for="firstname">First Name</label>
+    <label for="firstname">First Name:</label>
     <InputText type="text" id="firstname" @bind-Value="model.FirstName" />
 
-    <label for="lastname">Last Name</label>
+    <label for="lastname">Last Name:</label>
     <InputText type="text" id="lastname" @bind-Value="model.LastName" />
 
-    <label for="email">Email</label>
+    <label for="email">Email:</label>
     <InputText type="text" id="email" @bind-Value="model.Email" />
 
-    <label for="password">Password</label>
+    <label for="password">Password:</label>
     <InputText type="password" id="password" @bind-Value="model.Password" />
     <button class="btn btn-success" type="submit">Register</button>
 

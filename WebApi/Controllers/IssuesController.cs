@@ -15,7 +15,6 @@ namespace WebApi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    
     public class IssuesController : ControllerBase
     {
         private readonly SqlDbContext _context;
@@ -26,10 +25,10 @@ namespace WebApi.Controllers
             _context = context;
             _configuration = configuration;
         }
-   
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateIssueModel model)
-        {            
+        {
             try
             {
                 var issue = new Issue
@@ -40,9 +39,8 @@ namespace WebApi.Controllers
                     IssueStatus = model.IssueStatus,
                     Completed = model.Completed,
                     UserId = int.Parse(User.FindFirst("UserId").Value),
-
                 };
-                
+
                 _context.Issues.Add(issue);
                 await _context.SaveChangesAsync();
 
@@ -52,18 +50,32 @@ namespace WebApi.Controllers
             return new OkResult();
         }
 
-        // GET: api/Issues
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Issue>>> GetIssues()
+        public async Task<ActionResult<IEnumerable<Issue>>> GetIssues([FromQuery] string customer, [FromQuery] string issueStatus, [FromQuery] DateTime? created)
         {
-            return await _context.Issues.ToListAsync();
+            var query = _context.Issues.AsQueryable();
+
+            if (!string.IsNullOrEmpty(customer))
+            {
+                query = query.Where(x => x.Customer == customer);
+            }
+            if (!string.IsNullOrEmpty(issueStatus))
+            {
+                query = query.Where(x => x.IssueStatus == issueStatus);
+            }
+            if (created.HasValue)
+            {
+                query = query.Where(x => x.Created.Date == created.Value.Date);
+            }
+
+            return await query.ToListAsync();
         }
 
-        // GET: api/Issues/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Issue>> GetIssue(int id)
         {
             var issue = await _context.Issues.FindAsync(id);
+
 
             if (issue == null)
             {
@@ -73,8 +85,6 @@ namespace WebApi.Controllers
             return issue;
         }
 
-        // PUT: api/Issues/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutIssue(int id, Issue issue)
         {
@@ -104,9 +114,6 @@ namespace WebApi.Controllers
             return NoContent();
         }
 
-     
-
-        // DELETE: api/Issues/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteIssue(int id)
         {

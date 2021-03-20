@@ -3,10 +3,10 @@
 <h3>Login</h3>
 
 <EditForm Model="model" OnSubmit="OnSubmit">
-    <label for="email">Email</label>
-    <InputText type="text" id="email" @bind-Value="model.Email" />
+    <label for="email">Email:</label>
+    <InputText type="text" id="email" @bind-Value="model.Email"/>
 
-    <label for="password">Password</label>
+    <label for="password">Password:</label>
     <InputText type="password" id="password" @bind-Value="model.Password" />
     <button class="btn btn-success" type="submit">Login</button>
 
